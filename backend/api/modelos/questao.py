@@ -3,7 +3,6 @@ from usuario import Usuario
 class Questao:
     def __init__(self):
 
-        self.__id_hash = None
         self.__id_questao = None   #gerado automaticamente no programa
         self.__professor = None   #id do professor que cadastrou a questão no sistema
         self.__assunto = None
@@ -93,7 +92,7 @@ class Questao:
         if not isinstance(value, list):
             raise TypeError("Diciplina(as) devem ser uma lista")
 
-        value = [d.strip().lower() for d in value]
+        value = [d.strip().capitalize() for d in value]
 
         for disciplina in value:
             if not isinstance(disciplina, str):
@@ -141,9 +140,9 @@ class Questao:
         if not isinstance(value, str):
             raise TypeError("Dificuldade deve ser str")
         
-        value = value.strip().title()
+        value = value.strip().capitalize()
 
-        if value not in ["Fácil","Médio","Difícil"]:
+        if value not in ["Muito fácil","Fácil","Médio","Difícil","Muito difícil"]:
             raise ValueError ("Dificuldade inválida")
         
         self.__dificuldade = value
@@ -229,10 +228,10 @@ class Questao:
             raise TypeError("Alternativa correta deve ser str")
         value = value.strip()
 
-        if self.alternativas is None:
+        if self.__alternativas is None:
             raise ValueError("Alternativas devem ser definidas antes da correta")
 
-        if value not in self.alternativas:
+        if value not in self.__alternativas:
             raise ValueError("Alternativa correta deve estar na lista de alternativas")
         
         self.__alternativa_correta = value

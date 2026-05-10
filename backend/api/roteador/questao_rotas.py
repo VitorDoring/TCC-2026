@@ -2,35 +2,40 @@ from flask import Blueprint, request
 from functools import wraps
 #from backend.api.middlewares.jwt_middleware import Jwt_middleware
 #from backend.api.middlewares.questao_middleware import Questao_middleware
-#from backend.api.control.questao_controle import Questao_controle
+from api.controles.questao_controle import Questao_controle
 
 class Questao_rotas:
     #def __init__(self, jwt_middleware:Jwt_middleware, questao_middleware:Questao_middleware, questao_controle:Questao_controle):
-    def __init__(self):
+    def __init__(self, questao_controle:Questao_controle):
         print("⬆️  questao_rotas.__init__()")
 
         #self.jwt_middleware = jwt_middleware
         #self.questao_middleware = questao_middleware
-        #self.questao_controle = questao_controle
+        self.__questao_controle = questao_controle
 
-        self.blueprint = Blueprint('questoes',__name__)
+        self.__blueprint = Blueprint('questoes',__name__)
 
     def criar_rotas(self):
         
-        @self.blueprint.route('/',methods=['POST'])
+        @self.__blueprint.route('/',methods=['POST'])
         #@self.jwt_middleware.validar_token
         #@self.jwt_middleware.validar_body_criar
         def cadastrar():
-            return #self.questao_controle.cadastrar()
+            return self.__questao_controle.cadastrar()
         
-        @self.blueprint.route('/',methods=['GET'])
+        def importar():
+            return self.__questao_controle.importar()
+        
+        @self.__blueprint.route('/',methods=['GET'])
         def ler():
-            return #self.questao_controle.cadastrar()
+            return self.__questao_controle.cadastrar()
         
-        @self.blueprint.route('/',methods=['PUT'])
+        @self.__blueprint.route('/',methods=['PUT'])
         def alterar():
-            return #self.questao_controle.alterar()
+            return self.__questao_controle.alterar()
         
-        @self.blueprint.route('/',methods=['DELETE'])
-        def deletar():
-            return #self.questao_controle.deletar()
+        @self.__blueprint.route('/<int:id_questao>',methods=['DELETE'])
+        def deletar(id_questao):
+            return self.__questao_controle.deletar(id_questao)
+        
+        return self.__blueprint

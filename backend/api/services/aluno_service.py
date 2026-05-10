@@ -2,7 +2,6 @@ from api.modelos.aluno import Aluno
 from api.DAOs.aluno_dao import Aluno_dao
 
 from api.utils.resposta_erro import resposta_erro
-import pandas as pd
 
 class Aluno_service:
     def __init__(self, aluno_dao_dependency: Aluno_dao):

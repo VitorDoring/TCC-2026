@@ -26,6 +26,52 @@ class Disciplina_service:
             )
         return self.__disciplina_dao.criar(obj_disciplina)
     
+    def importar_excel(self,df) -> int:
+        print("🟣 disciplina_service.importar_excel()")
+
+        docs = []
+
+        inseridos = 0
+
+        for _,linha in df.iterrows():
+            if linha.isnull().any():
+                print("❌ Linha com valor nulo:", linha)
+                continue
+            try:
+                obj_disciplina = Disciplina()
+                professor = Usuario()
+
+                obj_disciplina.codigo_disciplina = linha["codigo"]
+                obj_disciplina.nome_disciplina = linha["nome disciplina"]
+                obj_disciplina.turma = linha["turma"]
+                obj_disciplina.alunos = linha["alunos"]
+
+                professor.nome = linha["nome professor"]
+                professor.registro = linha["registro professor"]
+
+                obj_disciplina.professor = professor
+
+                if self.__disciplina_dao.campo_existe("codigo_disciplina",obj_disciplina.codigo_disciplina):
+                    continue
+
+                doc = {
+                    "codigo_disciplina": obj_disciplina.codigo_disciplina,
+                    "nome_disciplina":obj_disciplina.nome_disciplina,
+                    "professor":obj_disciplina.professor,
+                    "turma":obj_disciplina.turma,
+                    "alunos":obj_disciplina.alunos
+                }
+
+                docs.append(doc)
+                inseridos += 1
+                
+
+            except Exception as e:
+                print(f'Erro na linha: {linha} → {e}')
+                continue
+        
+        self.__disciplina_dao.importar_excel(docs)
+    
     
     def consulta(self, filtro) -> list[dict]:
         print("🟣 disciplina_service.consulta()")

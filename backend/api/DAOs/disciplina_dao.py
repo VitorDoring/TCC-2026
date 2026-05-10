@@ -17,6 +17,10 @@ class Disciplina_dao:
         
         return True
     
+    def importar_excel(self, docs: list) -> bool:
+        print("✅ disciplina_dao.importar_excel()")
+        self.__colecao.insert_many(docs)
+    
 
     def consulta(self, filtro=None):
         print("✅ disciplina_dao.consulta()")

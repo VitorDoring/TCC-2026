@@ -16,6 +16,9 @@ Responsabilidades:
 
 def main():
     try:
+
+        #CMD: pip install -r requirements.txt
+
         # Cria instância do servidor na porta fornecida pela .env
         servidor = Servidor(porta=int(os.getenv("PORTA",8080)))
 

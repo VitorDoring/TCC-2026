@@ -28,7 +28,7 @@ class Usuario_rotas:
         @self.__blueprint.route('/excel',methods=['POST'])
         #@self.jwt_middleware.validar_token
         def importar():
-            return self.__aluno_controle.importar()
+            return self.__usuario_controle.importar()
         
         @self.__blueprint.route('/',methods=['GET'])
         def ler():

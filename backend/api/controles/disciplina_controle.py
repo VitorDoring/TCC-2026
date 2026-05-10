@@ -1,5 +1,6 @@
 from flask import request,jsonify
 from api.services.disciplina_service import Disciplina_service
+import pandas as pd
 
 class Disciplina_controle:
     def __init__(self, disciplina_service:Disciplina_service):
@@ -17,6 +18,32 @@ class Disciplina_controle:
                             "disciplina":self.formatar_disciplina(json_disciplina)
                             }
                         }),201
+    
+    def importar(self):
+        print("🔵 disciplina_controle.importar()")
+
+        arquivo = next(request.files.values(), None)
+        if not arquivo:
+            return jsonify({
+                "sucesso":False,
+                "erro":{"mensagem":"Arquivo não enviado"}
+            }),400
+        
+        if not arquivo.filename.endswith(".xlsx"):
+            return jsonify({
+            "sucesso":False,
+                "erro":{"mensagem": "Formato inváldo"}
+            }),400
+        
+        df = pd.read_excel(arquivo)
+        resultado = self.__disciplina_service.importar_excel(df)
+
+        return jsonify({
+            "sucesso":True,
+            "mensagem":"Executado com sucesso",
+            "data":{"disciplinas inseridas": resultado}
+        }),200
+    
     
     def ler(self):
         print("🔵 disciplina_controle.ler()")
