@@ -1,0 +1,445 @@
+type: collection.insomnia.rest/5.0
+name: tcc2026
+meta:
+  id: wrk_fe807a3bbe6545e591d3c31937a31e2a
+  created: 1775257526873
+  modified: 1775257526873
+collection:
+  - name: Alunos
+    meta:
+      id: fld_37b2fbd05ca546418c25920e007dbb1b
+      created: 1775257537182
+      modified: 1776127398665
+      sortKey: -1775257537182
+    children:
+      - url: 127.0.0.1:8080/api/v1/alunos
+        name: /alunos
+        meta:
+          id: req_9694c0cb549947b59e272e494296b965
+          created: 1775257530341
+          modified: 1776213692998
+          isPrivate: false
+          sortKey: -1775257539130
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/alunos
+        name: /alunos
+        meta:
+          id: req_d34a02292b354e3eacf15fd7ac11d631
+          created: 1775257732418
+          modified: 1775261306359
+          isPrivate: false
+          sortKey: -1775257732418
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"aluno":{
+            		"matricula_aluno":50240148,
+            		"nome_aluno":"Vitor Doring Leitão",
+            		"turma":"2JDAMANHADAUNIVAP",
+            		"serie":3,
+            		"situacao":"matriculado",
+            		"email_aluno":"vitordoringleitao@gmail.com",
+            		"ativo":true
+            	}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/alunos
+        name: /alunos
+        meta:
+          id: req_296a46cb54144cb2979f7eb20a0c4e7d
+          created: 1775259273452
+          modified: 1775259322643
+          isPrivate: false
+          sortKey: -1775259273452
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"aluno":{
+            		"matricula_aluno":50240148,
+            		"nome_aluno":"Vitor Doring Leitão da Silva",
+            		"turma":"2JDAMANHADAUNIVAP",
+            		"serie":3,
+            		"situacao":"matriculado",
+            		"email_aluno":"vitorleitao@gmail.com",
+            		"ativo":true
+            	}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/alunos/50240148
+        name: /alunos/matricula
+        meta:
+          id: req_5fa39e92472d4396a9abf104b337a30c
+          created: 1775259388021
+          modified: 1775259412123
+          isPrivate: false
+          sortKey: -1775259388021
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/alunos/excel
+        name: /alunos/excel
+        meta:
+          id: req_1ae129bbbfc340aa8d5f785376986727
+          created: 1776212759697
+          modified: 1776212903045
+          isPrivate: false
+          sortKey: -1775257635774
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - id: pair_e76616f33ea14c33afca577ea263ae3a
+              name: arquivo
+              disabled: false
+              type: file
+              fileName: C:\Users\Master\Downloads\arquivo.xlsx
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Usuários
+    meta:
+      id: fld_936aeccc8201430f914b3b8586763840
+      created: 1776127414294
+      modified: 1776128509977
+      sortKey: -1776127414294
+    children:
+      - url: 127.0.0.1:8080/api/v1/usuarios
+        name: /usuarios
+        meta:
+          id: req_024c505850884919bea1aa943478d8c1
+          created: 1776127416802
+          modified: 1776127442361
+          isPrivate: false
+          sortKey: -1776127416802
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/usuarios
+        name: /usuarios
+        meta:
+          id: req_811c1ed8b90d47cdb6cbffa433fe5902
+          created: 1776127558003
+          modified: 1776130957708
+          isPrivate: false
+          sortKey: -1776127558003
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "usuario":{
+                    "registro":50240146,
+                    "nome":"Helio Esperidiao",
+                    "email":"helioesperidiao@gmail.com",
+                    "senha":"2608H@#",
+                    "role":"Professor",
+                    "ativo":true
+                }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/usuarios?registro=50240148
+        name: /usuarios?registro
+        meta:
+          id: req_2e377d7570834ac798075578da9092db
+          created: 1776127836645
+          modified: 1776210096009
+          isPrivate: false
+          sortKey: -1776127836645
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "usuario":{
+                    "registro":50240148,
+                    "nome":"Helio Esperidiao",
+                    "email":"helioesperidiao@gmail.com",
+                    "role":"Professor",
+                    "ativo":true
+                }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/usuarios/50240148
+        name: /usuarios/registro
+        meta:
+          id: req_26f9d2a863c5465494f6f9dd1b315543
+          created: 1776128423786
+          modified: 1776210092513
+          isPrivate: false
+          sortKey: -1776128423786
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/usuarios/login
+        name: /usuarios/login
+        meta:
+          id: req_2385fc1bc79048a090498504794b64ee
+          created: 1776128505940
+          modified: 1776210077671
+          isPrivate: false
+          sortKey: -1776127487402.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"usuario":{
+            		"registro":50240146,
+            		"senha":"2608H@#"
+            	}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Disciplinas
+    meta:
+      id: fld_19e9b680e2e74b57aa1418dbf8686d0a
+      created: 1778453553915
+      modified: 1778453553915
+      sortKey: -1778453553915
+  - name: Questões
+    meta:
+      id: fld_7843710ca6134635b0c54bdf29a48f83
+      created: 1778453561326
+      modified: 1778893899186
+      sortKey: -1778453561326
+    children:
+      - url: 127.0.0.1:8080/api/v1/questoes
+        name: /questoes
+        meta:
+          id: req_4cc17f2260aa4f0391c85316029e6953
+          created: 1778453565016
+          modified: 1778894256175
+          isPrivate: false
+          sortKey: -1778453565016
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/questoes
+        name: /questoes
+        meta:
+          id: req_35bfb1a38eb2468c9bc69c5304cf3668
+          created: 1778453648564
+          modified: 1778893849259
+          isPrivate: false
+          sortKey: -1778453648564
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+            	"questao":{
+            		"professor":{
+            			"nome":"Ricardão dos sanots"
+            		},
+            		"assunto":"Guerra dos vários anos",
+            		"disciplina":"História",
+            		"tipo_questao":"Dissertativa",
+            		"dificuldade":"Médio",
+            		"autor":"ENEM",
+            		"enunciado":"Acerta essa e as outras questões pra você tirar um 10 bem chave e legal"
+            	}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/questoes?id_hash=6a07c41a81c58770bf2fad70
+        name: /questoes?id
+        meta:
+          id: req_32dd43a8cf7e4493baf0f95a057f00d6
+          created: 1778893900209
+          modified: 1778894195284
+          isPrivate: false
+          sortKey: -1778893900209
+        method: PUT
+        body:
+          mimeType: application/json
+          text: >-
+            {
+            	"questao":{
+            		"professor":{
+            			"nome":"Ricardão dos santos"
+            		},
+            		"assunto":"Guerra dos vários anos",
+            		"disciplina":"História",
+            		"tipo_questao":"Dissertativa",
+            		"dificuldade":"Difícil",
+            		"autor":"Fuvest",
+            		"enunciado":"Acerta essa e as outras questões pra você tirar um 10 bem chave e legal dql jeitão"
+            	}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: 127.0.0.1:8080/api/v1/questoes/6a07c41a81c58770bf2fad70
+        name: /questoes/id
+        meta:
+          id: req_baf9cd10341a47728e344a837b34dda6
+          created: 1778893902490
+          modified: 1778894204847
+          isPrivate: false
+          sortKey: -1778893902490
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_2eb3f0c9722b934df5e7f116ae9ad0bec1de04dc
+    created: 1775257526882
+    modified: 1775257526882
+environments:
+  name: Base Environment
+  meta:
+    id: env_2eb3f0c9722b934df5e7f116ae9ad0bec1de04dc
+    created: 1775257526878
+    modified: 1775257526878
+    isPrivate: false

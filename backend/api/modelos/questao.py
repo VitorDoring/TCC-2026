@@ -1,9 +1,8 @@
-from usuario import Usuario
+from api.modelos.usuario import Usuario
 
 class Questao:
-    def __init__(self):
-
-        self.__id_questao = None   #gerado automaticamente no programa
+    def __init__(self):  #gerado automaticamente no programa
+        self.__id_hash = None
         self.__professor = None   #id do professor que cadastrou a questão no sistema
         self.__assunto = None
         self.__disciplina = None
@@ -19,40 +18,24 @@ class Questao:
         return self.__id_hash
     
     @id_hash.setter
-    def id_hash(self, value):
+    def id_hash(self,value):
         if value is None:
-            raise ValueError("Id hash nulo")
+            raise ValueError("Id nulo")
         
         if not isinstance(value, str):
-            raise TypeError("Id deve ser uma string")
-        
+            raise ValueError("Id deve ser uma string")
         self.__id_hash = value
-    
-    #GET/SET ID DA QUESTÃO
-    @property
-    def id_questao(self):
-        return self.__id_questao
-    
-    @id_questao.setter
-    def id_questao(self,value):
-        if value is None:
-            raise ValueError("ID questão nulo")
-        
-        if not isinstance(value, int):
-            raise TypeError("ID questão deve ser int")
-        
-        if value <= 0:
-            raise ValueError("Id deve ser um número maior que zero")
-        
-        self.__id_questao = value
 
-    
+
     @property
     def professor(self):
         return self.__professor
 
     @professor.setter
     def professor(self, value):
+        if value is None:
+            raise ValueError("Professor nulo")
+        
         if not isinstance(value, Usuario):
             raise ValueError("Professor deve ser uma instância válida")
         self.__professor = value
@@ -89,8 +72,11 @@ class Questao:
         if value is None:
             raise ValueError("Disciplina(as) nula")
         
+        if isinstance(value,str):
+            value = [value]
+        
         if not isinstance(value, list):
-            raise TypeError("Diciplina(as) devem ser uma lista")
+            raise TypeError("Diciplina(as) deve(em) ser uma lista ou string")
 
         value = [d.strip().capitalize() for d in value]
 
@@ -195,21 +181,20 @@ class Questao:
         if self.tipo_questao is None:
             raise ValueError("Defina o tipo da questão antes das alternativas")
         
-        if self.tipo_questao == "Objetiva":
-            if value is None:
-                raise ValueError("Alternativas nula")
+        if value is None:
+            raise ValueError("Alternativas nula")
             
-            if not isinstance(value, list):
-                raise TypeError("Alternativas deve ser list")
+        if not isinstance(value, list):
+            raise TypeError("Alternativas deve ser list")
             
-            for alternativa in value:
-                if not isinstance(alternativa, str):
-                    raise TypeError("Alternativas devem ser strings")
+        for alternativa in value:
+            if not isinstance(alternativa, str):
+                raise TypeError("Alternativas devem ser strings")
             
-            value = [alternativa.strip() for alternativa in value]
+        value = [alternativa.strip() for alternativa in value]
 
-            if len(value) < 5:
-                raise ValueError("Deve ter pelo menos 5 alternativas")
+        if len(value) < 5:
+            raise ValueError("Deve ter pelo menos 5 alternativas")
 
         self.__alternativas = value
 

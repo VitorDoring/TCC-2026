@@ -45,8 +45,8 @@ class Usuario:
             raise ValueError("Nome do funcionário deve ter ao menos um sobrenome")
         
         for n in value.split(): 
-            if len(n) < 3:
-                raise ValueError("Cada parte do nome deve conter ao menos 3 caracteres")
+            if len(n) < 2:
+                raise ValueError("Cada parte do nome deve conter ao menos 2 caracteres")
 
         self.__nome = value
 

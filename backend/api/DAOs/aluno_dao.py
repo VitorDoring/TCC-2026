@@ -18,7 +18,7 @@ class Aluno_dao:
         
         return True
     
-    def importar_excel(self, docs: list) -> bool:
+    def importar_excel(self, docs: list):
         print("✅ aluno_dao.importar_excel()")
         self.__colecao.delete_many({})
         self.__colecao.insert_many(docs)

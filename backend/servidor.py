@@ -29,6 +29,12 @@ from api.services.disciplina_service import Disciplina_service
 from api.DAOs.disciplina_dao import Disciplina_dao
 from api.roteador.disciplina_rotas import Disciplina_rotas
 
+from api.middlewares.questao_middleware import Questao_middleware
+from api.controles.questao_controle import Questao_controle
+from api.services.questao_service import Questao_service
+from api.DAOs.questao_dao import Questao_dao
+from api.roteador.questao_rotas import Questao_rotas
+
 import traceback
 
 class Servidor:
@@ -66,6 +72,11 @@ class Servidor:
         self.__disciplina_service = None
         self.__disciplina_controle = None
 
+        self.__questao_middleware = Questao_middleware()
+        self.__questao_dao = None
+        self.__questao_service = None
+        self.__questao_controle = None
+
         self.__conexao_db = None
 
     def init(self):
@@ -89,6 +100,8 @@ class Servidor:
         self.__setup_usuario()
 
         self.__setup_disciplina()
+
+        self.__setup_questao()
 
 
     def __setup_aluno(self):
@@ -139,7 +152,7 @@ class Servidor:
 
 
     def __setup_disciplina(self):
-        """Configura o módulo Usuário (DAO, Service, Controle, Rotas)"""
+        """Configura o módulo Disciplina (DAO, Service, Controle, Rotas)"""
         print("⬆️  Setup disciplina")
 
         self.__disciplina_dao = Disciplina_dao(self.__conexao_db)
@@ -152,6 +165,23 @@ class Servidor:
         )
 
         self.__app.register_blueprint(disciplina_roteador.criar_rotas(), url_prefix="/api/v1/disciplinas")
+        print("⬆️  Rotas registradas")
+
+
+    def __setup_questao(self):
+        """Configura o módulo Questão (DAO, Service, Controle, Rotas)"""
+        print("⬆️  Setup questão")
+
+        self.__questao_dao = Questao_dao(self.__conexao_db)
+        self.__questao_service = Questao_service(self.__questao_dao)
+        self.__questao_controle = Questao_controle(self.__questao_service)
+
+        questao_roteador = Questao_rotas(
+            self.__questao_middleware,
+            self.__questao_controle
+        )
+
+        self.__app.register_blueprint(questao_roteador.criar_rotas(), url_prefix="/api/v1/questoes")
         print("⬆️  Rotas registradas")
         
 

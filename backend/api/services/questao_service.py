@@ -1,6 +1,6 @@
 from api.modelos.questao import Questao
 from api.modelos.usuario import Usuario
-from backend.api.DAOs.questao_dao import Questao_dao
+from api.DAOs.questao_dao import Questao_dao
 
 from api.utils.resposta_erro import resposta_erro
 
@@ -9,13 +9,20 @@ class Questao_service:
         print("⬆️ questao_service.__init__()")
         self.__questao_dao = questao_dao_dependency
 
-    def criar(self, json_questao: dict) -> bool:
+    def criar(self, json_questao: dict):
         print("🟣 questao_service.criar()")
 
+
+
         obj_questao = Questao()
-        obj_questao.id_questao = self.__questao_dao.buscar_ultimo_id()
         self._setar_modelo_questao(obj_questao, json_questao)
 
+        if self.__questao_dao.campo_existe("enunciado",obj_questao.enunciado):
+            raise resposta_erro(
+                400,
+                "Enunciado repetido",
+                {"mensagem":f'A questão de enunciado "{obj_questao.enunciado}" já está cadastrada'}
+            )
         return self.__questao_dao.criar(obj_questao)
     
     
@@ -25,7 +32,6 @@ class Questao_service:
         docs = []
 
         inseridos = 0
-        ultimo_id = self.__questao_dao.buscar_ultimo_id()
 
         for _, linha in df.iterrows():
             if linha.isnull().all():
@@ -35,44 +41,23 @@ class Questao_service:
                 obj_questao = Questao()
                 obj_professor = Usuario()
 
-                obj_questao.id_questao = ultimo_id
-                obj_questao.assunto = linha["assunto"]
-                obj_questao.disciplina = linha["disciplina"]
-                obj_questao.tipo_questao = linha["tipo_questao"]
-                obj_questao.dificuldade = linha["dificuldade"]
-                obj_questao.autor = linha["autor"]
-                obj_questao.enunciado = linha["enunciado"]
-                obj_questao.alternativas = linha["alternativas"]
-                obj_questao.alternativa_correta = linha["alternativa_correta"]
-
-                obj_professor.nome = linha["nome professor"]
-                obj_professor.registro = linha["registro professor"]
-
-                obj_questao.professor = obj_professor
+                self._ler_linha(obj_questao,obj_professor,linha)
 
                 if self.__questao_dao.campo_existe("enunciado",obj_questao.enunciado):
                     continue
 
-                doc = {
-                    "id_questao":obj_questao.id_questao,
-                    "assunto":obj_questao.assunto,
-                    "disciplina":obj_questao.disciplina,
-                    "autor":obj_questao.autor,
-                    "enunciado":obj_questao.enunciado,
-                    "alternativas":obj_questao.alternativas,
-                    "alternativa_correta":obj_questao.alternativa_correta,
-                    "professor":obj_questao.professor
-                }
+                doc = self.__questao_dao.set_doc(obj_questao)
 
                 docs.append(doc)
                 inseridos += 1
-                ultimo_id += 1
 
             except Exception as e:
-                print(f"Erro na linha: {linha} → {e}")
+                print(f"Erro na linha {_} → {e}")
                 continue
 
-        self.__questao_dao.importar_excel(docs)
+        if docs:
+            self.__questao_dao.importar_excel(docs)
+        return inseridos
 
     
     def consulta(self, filtro) -> list[dict]:
@@ -88,25 +73,46 @@ class Questao_service:
         return self.__questao_dao.atualizar(obj_questao,filtro)
 
     
-    def excluir(self, id_questao: int) -> bool:
+    def excluir(self, _id: str) -> bool:
         print("🟣 questao_service.excluir()")
-        obj_questao = Questao()
-        obj_questao.id_questao = id_questao
-        return self.__questao_dao.excluir(obj_questao.id_questao)
+        return self.__questao_dao.excluir(_id)
+    
+    _campos_questao = [
+            "assunto",
+            "disciplina",
+            "tipo_questao",
+            "dificuldade",
+            "enunciado"
+        ]
 
     
     def _setar_modelo_questao(self,obj_questao,json_questao):
-        obj_questao.assunto = json_questao.get("assunto")
-        obj_questao.disciplina = json_questao.get("disciplina")
-        obj_questao.tipo_questao = json_questao.get("tipo_questao")
-        obj_questao.dificuldade = json_questao.get("dificuldade")
-        obj_questao.autor = json_questao.get("autor")
-        obj_questao.enunciado = json_questao.get("enunciado")
-        obj_questao.alternativas = json_questao.get("alternativas")
-        obj_questao.alternativa_correta = json_questao.get("alternativa_correta")
+
+
+        for campo in self._campos_questao:
+            setattr(obj_questao, campo, json_questao.get(campo))
         
         dados_professor = json_questao.get("professor")
         professor = Usuario()
-        professor.registro = dados_professor.get("registro")
         professor.nome = dados_professor.get("nome")
         obj_questao.professor = professor
+
+        if obj_questao.tipo_questao == "Objetiva":
+            obj_questao.alternativas = json_questao.get("alternativas")
+            obj_questao.alternativa_correta = json_questao.get("alternativa_correta")
+
+        if json_questao.get("autor") == "":
+            obj_questao.autor = obj_questao.professor.nome
+        else:
+            obj_questao.autor = json_questao.get("autor")
+
+
+
+    def _ler_linha(self, obj_questao,obj_professor,linha):
+
+        for campo in self._campos_questao:
+            setattr(obj_questao, campo, linha.get(campo))
+
+        obj_professor.nome = linha.get("nome professor")
+
+        obj_questao.professor = obj_professor
