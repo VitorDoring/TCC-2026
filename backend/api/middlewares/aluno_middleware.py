@@ -24,6 +24,27 @@ class Aluno_middleware:
             return f(*args,**kwargs)
         return decorated_function
     
+    def validar_body_alterar(self,f):
+        @wraps(f)
+        def decorated_function(*args,**kwargs):
+            print("🔷 aluno_middleware.validar_body()")
+            body = request.get_json()
+
+            if not body or 'aluno' not in body:
+                raise resposta_erro(400, "Erro na validação de dados", {"mensagem": "O campo 'aluno' é obrigatório!"})
+            
+            aluno = body['aluno']
+
+            campos_obrigatorios = ["nome_aluno","turma",
+                                    "serie","situacao","email_aluno","ativo"]
+            
+            for campo in campos_obrigatorios:
+                if campo not in aluno:
+                    raise resposta_erro(400, "Erro na validação de dados", {"mensagem": f"O campo '{campo}' é obrigatório!"})
+                
+            return f(*args,**kwargs)
+        return decorated_function
+    
     def validar_matricula_param(self,f):
         @wraps(f)
         def decorated_function(*args,**kwargs):

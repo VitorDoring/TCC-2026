@@ -26,11 +26,6 @@ class Questao_dao:
         return str(resultado.inserted_id)
 
     
-    def importar_excel(self, docs: list):
-        print("✅ questao_dao.importar_excel()")
-        self.__colecao.insert_many(docs)
-
-    
     def consulta(self, filtro=None) -> list:
         print("✅ questao_dao.consulta()")
 
@@ -58,16 +53,15 @@ class Questao_dao:
         return resultado
     
     
-    def atualizar(self, obj_questao: Questao, filtro=None) -> bool:
+    def atualizar(self, obj_questao: Questao) -> bool:
         print("✅ questao_dao.atualizar()")
 
-        filtro = (filtro or {}).copy()
+        _id = obj_questao.id_hash
 
-        if "_id" in filtro:
-            try:
-                filtro["_id"] = ObjectId(filtro["_id"])
-            except:
-                return []
+        try:
+            filtro = {"_id":ObjectId(_id)}
+        except:
+            return False
 
         doc = {
             "$set": self.set_doc(obj_questao)
@@ -122,5 +116,7 @@ class Questao_dao:
         if doc["tipo_questao"] == "Objetiva":
             doc["alternativas"] = obj_questao.alternativas
             doc["alternativa_correta"] = obj_questao.alternativa_correta
+        else:
+            doc["numero_linhas"] = obj_questao.numero_linhas
 
         return doc

@@ -14,16 +14,30 @@ class Questao_middleware:
             
             questao = body['questao']
             campos_obrigatorios = ["professor","assunto","disciplina",
-                                    "tipo_questao","dificuldade","autor",
+                                    "tipo_questao","dificuldade",
                                     "enunciado"]
-            
-            professor = questao["professor"]
-            campos_obrigatorios_professor = ["nome"]
 
             for campo in campos_obrigatorios:
                 if campo not in questao:
                     raise resposta_erro(400, "Erro na validação de dados", {"mensagem":f"O campo '{campo}' é obrigatório!"})
+                
+            tem_alternativas = (
+                "alternativas" in questao and
+                "alternativa_correta" in questao
+            )
+
+            tem_numero_linhas = "numero_linhas" in questao
+
+            if not (tem_alternativas or tem_numero_linhas):
+                raise resposta_erro(
+                    400,
+                    "Erro na validação de dados",
+                    {"mensagem": "É necessário ter alternativas ou número de linhas"}
+                )
                                 
+            professor = questao["professor"]
+            campos_obrigatorios_professor = ["nome"]
+
             for campo_professor in campos_obrigatorios_professor:
                 if campo_professor not in professor:
                     raise resposta_erro(400, "Erro na validação de dados", {"mensagem": f"O campo '{campo_professor}' do professor é obrigatório!"})
@@ -35,7 +49,7 @@ class Questao_middleware:
         @wraps(f)
         def decorated_function(*args,**kwargs):
             print("🔷 questao_middleware.validar_id()")
-            if 'id_hash' not in kwargs:
-                raise resposta_erro(400, "Erro na validação de dados", {"mensagem": "O parâmetro 'id_hash' é obrigatório!"})
+            if '_id' not in kwargs:
+                raise resposta_erro(400, "Erro na validação de dados", {"mensagem": "O parâmetro '_id' é obrigatório!"})
             return f(*args, **kwargs)
         return decorated_function

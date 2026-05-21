@@ -9,10 +9,16 @@ class Questao_service:
         print("⬆️ questao_service.__init__()")
         self.__questao_dao = questao_dao_dependency
 
+    _campos_questao = [
+        "assunto",
+        "disciplina",
+        "tipo_questao",
+        "dificuldade",
+        "enunciado"
+    ]
+    
     def criar(self, json_questao: dict):
         print("🟣 questao_service.criar()")
-
-
 
         obj_questao = Questao()
         self._setar_modelo_questao(obj_questao, json_questao)
@@ -25,39 +31,6 @@ class Questao_service:
             )
         return self.__questao_dao.criar(obj_questao)
     
-    
-    def importar_excel(self,df) -> int:
-        print("🟣 questao_service.importar_excel()")
-
-        docs = []
-
-        inseridos = 0
-
-        for _, linha in df.iterrows():
-            if linha.isnull().all():
-                print("❌ Linha com valor nulo:", linha)
-                continue
-            try:
-                obj_questao = Questao()
-                obj_professor = Usuario()
-
-                self._ler_linha(obj_questao,obj_professor,linha)
-
-                if self.__questao_dao.campo_existe("enunciado",obj_questao.enunciado):
-                    continue
-
-                doc = self.__questao_dao.set_doc(obj_questao)
-
-                docs.append(doc)
-                inseridos += 1
-
-            except Exception as e:
-                print(f"Erro na linha {_} → {e}")
-                continue
-
-        if docs:
-            self.__questao_dao.importar_excel(docs)
-        return inseridos
 
     
     def consulta(self, filtro) -> list[dict]:
@@ -65,25 +38,21 @@ class Questao_service:
         return self.__questao_dao.consulta(filtro)
     
     
-    def atualizar(self, json_questao: dict, filtro) -> bool:
+    def atualizar(self, json_questao: dict, _id: str) -> bool:
         print("🟣 questao_service.atualizar()")
 
         obj_questao = Questao()
         self._setar_modelo_questao(obj_questao, json_questao)
-        return self.__questao_dao.atualizar(obj_questao,filtro)
+        obj_questao.id_hash = _id
+        return self.__questao_dao.atualizar(obj_questao)
 
     
     def excluir(self, _id: str) -> bool:
         print("🟣 questao_service.excluir()")
-        return self.__questao_dao.excluir(_id)
-    
-    _campos_questao = [
-            "assunto",
-            "disciplina",
-            "tipo_questao",
-            "dificuldade",
-            "enunciado"
-        ]
+        obj_questao = Questao()
+        obj_questao.id_hash = _id
+        return self.__questao_dao.excluir(obj_questao.id_hash)
+
 
     
     def _setar_modelo_questao(self,obj_questao,json_questao):
@@ -100,19 +69,10 @@ class Questao_service:
         if obj_questao.tipo_questao == "Objetiva":
             obj_questao.alternativas = json_questao.get("alternativas")
             obj_questao.alternativa_correta = json_questao.get("alternativa_correta")
+        else:
+            obj_questao.numero_linhas = json_questao.get("numero_linhas")
 
-        if json_questao.get("autor") == "":
+        if "autor" not in json_questao:
             obj_questao.autor = obj_questao.professor.nome
         else:
             obj_questao.autor = json_questao.get("autor")
-
-
-
-    def _ler_linha(self, obj_questao,obj_professor,linha):
-
-        for campo in self._campos_questao:
-            setattr(obj_questao, campo, linha.get(campo))
-
-        obj_professor.nome = linha.get("nome professor")
-
-        obj_questao.professor = obj_professor

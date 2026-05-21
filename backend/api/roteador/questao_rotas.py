@@ -23,22 +23,19 @@ class Questao_rotas:
         def cadastrar():
             return self.__questao_controle.cadastrar()
         
-        @self.__blueprint.route('/excel',methods=['POST'])
-        def importar():
-            return self.__questao_controle.importar()
-        
         @self.__blueprint.route('/',methods=['GET'])
         def ler():
             return self.__questao_controle.ler()
         
-        @self.__blueprint.route('/',methods=['PUT'])
-        @self.questao_middleware.validar_body
-        def alterar():
-            return self.__questao_controle.alterar()
-        
-        @self.__blueprint.route('/<string:id_hash>',methods=['DELETE'])
+        @self.__blueprint.route('/<string:_id>',methods=['PUT'])
         @self.questao_middleware.validar_id_questao
-        def deletar(id_hash):
-            return self.__questao_controle.deletar(id_hash)
+        @self.questao_middleware.validar_body
+        def alterar(_id):
+            return self.__questao_controle.alterar(_id)
+        
+        @self.__blueprint.route('/<string:_id>',methods=['DELETE'])
+        @self.questao_middleware.validar_id_questao
+        def deletar(_id):
+            return self.__questao_controle.deletar(_id)
         
         return self.__blueprint

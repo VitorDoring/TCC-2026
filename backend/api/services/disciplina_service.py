@@ -15,7 +15,7 @@ class Disciplina_service:
         print("🟣 disciplina_service.criar()")
 
         obj_disciplina = Disciplina()
-        self.setar_modelo_disciplina(obj_disciplina, json_disciplina)
+        self._setar_modelo_disciplina(obj_disciplina, json_disciplina)
 
         codigo_existe = self.__disciplina_dao.campo_existe("codigo_disciplina",obj_disciplina.codigo_disciplina)
         if codigo_existe:
@@ -82,7 +82,7 @@ class Disciplina_service:
         print("🟣 disciplina_service.atualizar()")
 
         obj_disciplina = Disciplina()
-        self.setar_modelo_disciplina(obj_disciplina, json_disciplina)
+        self._setar_modelo_disciplina(obj_disciplina, json_disciplina)
         return self.__disciplina_dao.atualizar(obj_disciplina, filtro)
     
 
@@ -93,7 +93,7 @@ class Disciplina_service:
         return self.__disciplina_dao.excluir(obj_disciplina.codigo_disciplina)
     
         
-    def setar_modelo_disciplina(self, obj_disciplina, json_disciplina):
+    def _setar_modelo_disciplina(self, obj_disciplina, json_disciplina):
         obj_disciplina.codigo_disciplina = json_disciplina.get("codigo_disciplina")
         obj_disciplina.nome_disciplina = json_disciplina.get("nome_disciplina")
         obj_disciplina.turma = json_disciplina.get("turma")

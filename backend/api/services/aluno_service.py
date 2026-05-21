@@ -13,7 +13,8 @@ class Aluno_service:
         print("🟣 aluno_service.criar()")
 
         obj_aluno = Aluno()
-        self.setar_modelo_aluno(obj_aluno, json_aluno)
+        obj_aluno.matricula_aluno = json_aluno.get("matricula_aluno")
+        self._setar_modelo_aluno(obj_aluno, json_aluno)
 
         matricula_existe = self.__aluno_dao.campo_existe("matricula_aluno",obj_aluno.matricula_aluno)
         if matricula_existe:
@@ -77,12 +78,22 @@ class Aluno_service:
         return self.__aluno_dao.consulta(filtro)
     
     
-    def atualizar(self, json_aluno: dict, filtro) -> bool:
+    def atualizar(self, json_aluno: dict, matricula_aluno) -> bool:
         print("🟣 aluno_service.atualizar()")
 
         obj_aluno = Aluno()
-        self.setar_modelo_aluno(obj_aluno, json_aluno)
-        return self.__aluno_dao.atualizar(obj_aluno, filtro)
+        obj_aluno.matricula_aluno = matricula_aluno
+        self._setar_modelo_aluno(obj_aluno, json_aluno)
+
+        matricula_existe = self.__aluno_dao.campo_existe("matricula_aluno",obj_aluno.matricula_aluno)
+        if not matricula_existe:
+            raise resposta_erro(
+                400,
+                "Matrícula repetida",
+                {"mensagem":f"O aluno com a matrícula {obj_aluno.matricula_aluno} não está cadastrado"}
+            )
+        
+        return self.__aluno_dao.atualizar(obj_aluno)
     
     
     def excluir(self, matricula_aluno: int) -> bool:
@@ -92,8 +103,7 @@ class Aluno_service:
         return self.__aluno_dao.excluir(obj_aluno.matricula_aluno)
 
 
-    def setar_modelo_aluno(self, obj_aluno ,json_aluno):
-        obj_aluno.matricula_aluno = json_aluno.get("matricula_aluno")
+    def _setar_modelo_aluno(self, obj_aluno ,json_aluno):
         obj_aluno.nome_aluno = json_aluno.get("nome_aluno")
         obj_aluno.turma = json_aluno.get("turma")
         obj_aluno.serie = json_aluno.get("serie")

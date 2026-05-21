@@ -11,7 +11,7 @@ class resposta_erro(Exception):
 
     @property
     def erro(self):
-        return self.__error
+        return self.__erro
 
     def __str__(self) -> str:
         return f"[{self.__httpCode}] {self.args[0]} | Detalhes: {self.__erro}" 

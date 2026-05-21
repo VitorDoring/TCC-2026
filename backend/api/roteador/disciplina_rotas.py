@@ -23,7 +23,6 @@ class Disciplina_rotas:
             return self.__disciplina_controle.cadastrar()
         
         @self.__blueprint.route('/excel',methods=['POST'])
-        @self.__disciplina_middleware.validar_body
         def importar():
             return self.__disciplina_controle.importar()
         

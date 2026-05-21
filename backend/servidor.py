@@ -205,7 +205,7 @@ class Servidor:
                     "error": {
                         "message": str(error),
                         "code": getattr(error, "code", None),
-                        "details": getattr(error, "error", None)
+                        "details": getattr(error, "erro", None)
                     },
                     "data": {
                         "message": "Erro tratado pela aplicação",
